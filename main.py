@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 DSN = os.getenv('PASSWORD')
-engine = sq.create_engine(DSN)
+engine = sq.create_engine(DSN)  #echo=True
 create_tables(engine)
 
 Session = sessionmaker(bind=engine)
