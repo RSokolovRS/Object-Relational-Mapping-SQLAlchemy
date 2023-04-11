@@ -1,18 +1,18 @@
 from main import Session
 from models import Publisher, Book, Shop, Stock, Sale
 
-session = Session()
-# for v in session.query(Publisher):
-#     print(v)
+# session = Session()
+# # for v in session.query(Publisher):
+# #     print(v)
     
-# with Session() as session:
-subq = session.query(Publisher).filter(Publisher.name.like("%Microsoft Press%")).subquery()
-# print(subq)
-subq = session.query(Book).join(subq, Book.id_publisher == subq.c.id).subquery()
-q1 = session.query(Book.title, Stock.count).join(subq, Stock.id_book == subq.c.id)
-print(q1)
-for v in q1.all():
-    print( v)
+# # with Session() as session:
+# subq = session.query(Publisher).filter(Publisher.name.like("%Microsoft Press%")).subquery()
+# # print(subq)
+# subq = session.query(Book).join(subq, Book.id_publisher == subq.c.id).subquery()
+# q1 = session.query(Book.title, Stock.count).join(subq, Stock.id_book == subq.c.id)
+# print(q1)
+# for v in q1.all():
+#     print( v)
 
 # for i in session.query(Publisher).join(Book.publisher).all():
 #     print(i)
@@ -35,4 +35,4 @@ for v in q1.all():
 		# execute all you need
 
 
-session.close()
+# session.close()
