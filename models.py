@@ -65,8 +65,3 @@ class Sale(Base):
         return f'{self.id} | {self.price} | {self.date_sale} | {self.count} | {self.id_stock}'
 
 
-def create_tables(engine):
-    # Base.metadata.drop_all(engine)
-    Base.metadata.create_all(engine)
-
-

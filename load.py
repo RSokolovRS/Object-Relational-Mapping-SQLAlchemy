@@ -1,4 +1,4 @@
-import json
+import json  # Библиотека для работы с json.
 from models import Publisher, Shop, Book, Stock, Sale
 from main import Session
 
