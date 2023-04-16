@@ -1,20 +1,34 @@
 from main import Session
 from models import Publisher, Book, Shop, Stock, Sale
+from sqlalchemy import String, func #Импортируем из sqlalchemy тип данных String и func, чтобы использовать приведение типов и преобразование даты в необходимый формат.
 
 session = Session()
 
-def search(name:None):
-    try:
-        q = session.query(Publisher.name,Book.title,Stock.count,Shop.\
-            name,Sale.price,Sale.date_sale).\
-            filter(Book.publisher,Stock.book,Stock.shop,Sale.shop).\
-            filter(Publisher.name.like(name))
-        for i in q.all():
-            print(i)
-    except:
-        print('Таких данных нет!')
-    finally:
-        session.close()
+def get_shops(name): #Функция принимает обязательный параметр
+    query = session.query( #Создаем общее тело запроса на выборку данных и сохраняем в переменную
+        Book.title, #Название книги
+        Shop.name, #Имя магазина
+        func.cast(Sale.price, String), #Стоимость продажи, преобразовывая числовой тип данных в строку.
+        func.to_char(Sale.date_sale, 'DD-MM-YYYY') #Дату продажи, преобразовывая дату в строку и в вид, который указан в примере задания.
+        ).select_from(Shop).\
+            join(Stock.shop).\
+            join(Stock.book).\
+            join(Book.publisher).\
+            join(Sale) #Объединяем с таблицей продаж
+    if name.isdigit(): #Проверяем переданные данные в функцию на то, что строка состоит только из чисел
+        a = query.filter(Publisher.id == name).all() #Обращаемся к запросу, который составили ранее, и применяем фильтрацию, где айди публициста равно переданным данным в функцию, и сохраняем в переменную
+        return a
+    else:
+        b = query.filter(Publisher.name == name).all() #Обращаемся к запросу, который составили ранее, и применяем фильтрацию, где имя публициста равно переданным данным в функцию, и сохраняем в переменную
+        return b
+    
 
-if __name__ == "__main__": # Точка входа.
-    search(input('Enter the data:'))
+session.close()
+
+
+if __name__ == '__main__':
+    name = input("Enter the data:") #Просим клиента ввести имя или айди публициста и данные сохраняем в переменную
+    user_request = get_shops(name) #Вызываем функцию получения данных из базы, передавая в функцию данные, которые ввел пользователь, и результат сохраняем в переменную
+    for value in user_request: #Проходим в цикле по полученным данным, получая при каждой итерации кортеж с данными
+        print(' | '.join(value)) #Преобразуем кортеж в строку, используя метод join, где в качестве разделителя вертикальная черта с пробелами по краям. Чтобы работало все корректно, все значения кортежа должны быть в строком типе данных
+

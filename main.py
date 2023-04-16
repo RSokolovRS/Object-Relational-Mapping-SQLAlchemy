@@ -5,8 +5,15 @@ import os
 from dotenv import load_dotenv # Библиотека для работы с переменным окружением.(.env)
 
 load_dotenv()
-DSN = os.getenv('PASSWORD')
-engine = sq.create_engine(DSN)  #echo=True
+user_name = os.getenv('user_name')		#Получаем имя юзера из окружения и сохраняем в переменную
+PASSWORD= os.getenv('PASSWORD')		#Получаем пароль юзера из окружения и сохраняем в переменную
+host = os.getenv('host')		#Получаем хост из окружения и сохраняем в переменную
+port = os.getenv('port')		#Получаем порт из окружения и сохраняем в переменную
+DATABASE = os.getenv('DATABASE')	
+
+DATABASE_URL = f'postgresql://{user_name}:{PASSWORD}@{host}:{port}/{DATABASE}'
+# DSN = os.getenv('DATABASE_URL')
+engine = sq.create_engine(DATABASE_URL)  #echo=True
 
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -21,6 +28,6 @@ session.close()
 
 if __name__ == '__main__':
     create_tables(engine)
-
+    # drop_tables(engine)
 
 

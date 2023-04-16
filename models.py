@@ -11,7 +11,7 @@ class Publisher(Base):
     name = sq.Column(sq.String(length=60), unique=True)
 
     def __str__(self):
-        return f'{self.id} | {self.name}'
+        return f'Publisher {self.id} | {self.name}'
 
 class Book(Base):
     __tablename__ = "book"
@@ -23,7 +23,7 @@ class Book(Base):
     publisher = relationship(Publisher, backref="book")
 
     def __str__(self):
-        return f'{self.id} | {self.title} | {self.id_publisher}'
+        return f'Book {self.id} | {self.title} | {self.id_publisher}'
 
 
 class Shop(Base):
@@ -33,7 +33,7 @@ class Shop(Base):
     name = sq.Column(sq.String(length=120), unique=True)
 
     def __str__(self):
-        return f'{self.id} | {self.name}'
+        return f'Shop {self.id} | {self.name}'
 
 class Stock(Base):
     __tablename__ = "stock"
@@ -47,7 +47,7 @@ class Stock(Base):
     shop = relationship(Shop, backref="stock")
     
     def __str__(self):
-        return f'{self.id} | {self.count} | {self.id_book} | {self.id_shop}'
+        return f'Stock {self.id} | {self.count} | {self.id_book} | {self.id_shop}'
 
 
 class Sale(Base):
@@ -59,9 +59,9 @@ class Sale(Base):
     count = sq.Column(sq.Integer, nullable=False)
     id_stock = sq.Column(sq.Integer, sq.ForeignKey("stock.id"), nullable=False)
 
-    shop = relationship(Stock, backref="sale")
+    stock = relationship(Stock, backref="sale")
 
     def __str__(self):
-        return f'{self.id} | {self.price} | {self.date_sale} | {self.count} | {self.id_stock}'
+        return f'Sale {self.id} | {self.price} | {self.date_sale} | {self.count} | {self.id_stock}'
 
 
